@@ -2,25 +2,19 @@ package edu.galileo.mvp;
 
 import android.text.TextUtils;
 
-import static android.R.string.cancel;
-import static edu.galileo.mvp.R.id.email;
-
 /**
  * Created by Tony Howarth on 5/4/2017.
  */
 
-public class LoginPresenterImpl implements  LoginPresenter, LoginModel.OnLoginFinishedListener {
+public class LoginPresenterImpl implements  LoginPresenter{
 
     private LoginView mLoginView;
     private LoginModel mLoginModel;
-
 
     public LoginPresenterImpl(LoginView loginView) {
         mLoginView = loginView;
         mLoginModel = new LoginModelImpl();
     }
-
-
 
     @Override
     public void validateCredentials(String username, String password) {
@@ -39,24 +33,7 @@ public class LoginPresenterImpl implements  LoginPresenter, LoginModel.OnLoginFi
             return;
         }
         mLoginView.showProgress(true);
-        mLoginModel.login(username, password, this);
-    }
-
-    @Override
-    public void onCanceled() {
-        mLoginView.showProgress(false);
-    }
-
-    @Override
-    public void onPasswordError() {
-        mLoginView.showProgress(false);
-        mLoginView.setPasswordError(R.string.error_incorrect_password);
-    }
-
-    @Override
-    public void onSuccess() {
-        mLoginView.showProgress(false);
-        mLoginView.successAction();
+        mLoginModel.login(username, password);
     }
 
     private boolean isEmailValid(String email) {

@@ -10,6 +10,4 @@ public interface LoginView {
     void setUsernameError(int messageResId);
 
     void setPasswordError(int messageResId);
-
-    void successAction();
 }

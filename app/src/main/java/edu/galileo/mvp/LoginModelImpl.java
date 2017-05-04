@@ -1,7 +1,12 @@
 package edu.galileo.mvp;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+
+import edu.galileo.mvp.event.CanceledEvent;
+import edu.galileo.mvp.event.PasswordErrorEvent;
+import edu.galileo.mvp.event.SuccessEvent;
 
 /**
  * Created by Tony Howarth on 5/4/2017.
@@ -9,7 +14,7 @@ import android.widget.Toast;
 
 public class LoginModelImpl implements LoginModel{
 
-    private OnLoginFinishedListener mLogListener;
+
 
 
     /**
@@ -21,9 +26,7 @@ public class LoginModelImpl implements LoginModel{
     };
 
     @Override
-    public void login(String username, String password, OnLoginFinishedListener listener) {
-        mLogListener = listener;
-
+    public void login(String username, String password) {
         new UserLoginTask(username, password).execute((Void) null);
     }
 
@@ -63,15 +66,15 @@ public class LoginModelImpl implements LoginModel{
         @Override
         protected void onPostExecute(final Boolean success) {
             if (success) {
-                mLogListener.onSuccess();
+                EventBus.getDefault().post(new SuccessEvent());
             } else {
-                mLogListener.onPasswordError();
+                EventBus.getDefault().post(new PasswordErrorEvent());
             }
         }
 
         @Override
         protected void onCancelled() {
-          mLogListener.onCanceled();
+            EventBus.getDefault().post(new CanceledEvent());
         }
     }
 }
